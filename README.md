@@ -15,9 +15,17 @@ Notes:
 
 - chat will not always work if your device has strict blocking or are on a public network - Nicholas He
 
-5/19/2026 run the files for games in html runner, take content of the chat.html file to run in a html viewer or in file:// (credit for the chat: Nicholas He)
+5/19/2026 
 
-5/20/2026 tried to add Counter-Strike.exe, but file too large and zip does not work, tried to use Git LFS (someone plz help)
+- run the files for games in html runner,
+
+- take content of the chat.html file to run in a html viewer or in file:// (credit for the chat: Nicholas He)
+
+5/20/2026 
+
+- tried to add Counter-Strike.exe, but file too large and zip does not work, tried to use Git LFS (someone plz help)
+
+- opened collaborator spots
 
 
 

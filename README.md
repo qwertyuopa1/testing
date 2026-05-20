@@ -11,7 +11,7 @@ Notes:
 
 - Links.html is open for new links for donation - Linus
 
-- go to discussions page for chat - Linus
+- go to discussions page for chat, and issues if you want to do something - Linus
 
 - chat will not always work if your device has strict blocking or are on a public network - Nicholas He
 

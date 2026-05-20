@@ -15,6 +15,8 @@ Notes:
 
 - chat will not always work if your device has strict blocking or are on a public network - Nicholas He
 
+- if you are adding new files, plz add them to corresponding file or tell me - Linus
+
 5/19/2026 
 
 - run the files for games in html runner (just upload)- Linus
@@ -27,7 +29,7 @@ Notes:
 
 - opened contributer spots - Linus
 
-- 
+- added organized file folders - Linus
 
 
 

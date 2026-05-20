@@ -25,8 +25,9 @@ Notes:
 
 - tried to add Counter-Strike.exe, but file too large and zip does not work, tried to use Git LFS (someone plz help) - Linus
 
-- opened collaborator spots - Linus
+- opened contributer spots - Linus
 
+- 
 
 
 

@@ -1,6 +1,8 @@
 
 Games and stuff (by Linus Lee)
 
+If you want to join plz create and account and tell me the name so I can add you
+
 Notes: Most games do not work since jsdelivr is blocked. Also I am broke plz add more files, Links.html is open for new links for donation
 
 

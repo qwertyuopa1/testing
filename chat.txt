@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>P2P Chat - Joiner</title>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <style>
+        :root { --bg: #ffffff; --text: #000000; --chat-bg: #f0f0f0; }
+        [data-theme='dark'] { --bg: #ffffff; --text: #ffffff; --chat-bg: #222222; }
+        body { background: var(--bg); color: var(--text); font-family: sans-serif; padding: 20px; transition: 0.3s; }
+        #chat-box { height: 300px; border: 1px solid #ccc; overflow-y: scroll; background: var(--chat-bg); padding: 10px; border-radius: 8px; }
+        .msg-admin { color: #ff4d4d; font-weight: bold; }
+        .msg-user { color: var(--text); }
+        .instruction { color: #888; font-size: 0.8em; display: block; }
+    </style>
+</head>
+<body>
+    <h2><b>Group Chat</b></h2>
+    <button onclick="toggleTheme()">--toggle theme--</button>
+
+    <div id="login-screen">
+        <input type="text" id="peer-id" placeholder="Join Code"><br><br>
+        <span class="instruction">put in real name</span>
+        <input type="text" id="username" placeholder="Real Name"><br><br>
+        <button onclick="connectToAdmin()">Join</button>
+    </div>
+
+    <div id="chat-area" style="display:none">
+        <div id="chat-box"></div>
+        <input type="text" id="message" placeholder="Type here..." onkeydown="if(event.key==='Enter') sendMessage()">
+        <button id="send-btn" onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        let peer = new Peer();
+        let conn;
+        let myUsername = "";
+
+        function connectToAdmin() {
+            const targetId = document.getElementById('peer-id').value;
+            const userIn = document.getElementById('username').value.trim();
+            if (!targetId || !userIn) return alert("Fill all fields");
+
+            myUsername = userIn;
+            conn = peer.connect(targetId);
+
+            conn.on('open', () => {
+                conn.send({ type: 'join_request', username: myUsername });
+                document.getElementById('login-screen').innerHTML = "<h3>Waiting for Approval</h3>";
+            });
+
+            conn.on('data', data => {
+                if (data.type === 'accepted') {
+                    document.getElementById('login-screen').style.display = "none";
+                    document.getElementById('chat-area').style.display = "block";
+                } else if (data.type === 'chat') {
+                    appendMsg(data.sender, data.msg, data.role);
+                } else if (data.type === 'muted') {
+                    document.getElementById('message').disabled = true;
+                    document.getElementById('send-btn').disabled = true;
+                    appendMsg('System', `You have been muted for ${data.duration || 'indefinite'} mins.`, 'user');
+                } else if (data.type === 'unmuted') {
+                    document.getElementById('message').disabled = false;
+                    document.getElementById('send-btn').disabled = false;
+                    appendMsg('System', 'You have been unmuted.', 'user');
+                } else if (data.type === 'banned') {
+                    alert("Banned from room.");
+                    location.reload();
+                }
+            });
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('message');
+            if(!input.value) return;
+            conn.send({ type: 'chat', sender: myUsername, msg: input.value });
+            input.value = '';
+        }
+
+        function appendMsg(sender, msg, role) {
+            const box = document.getElementById('chat-box');
+            box.innerHTML += `<div class="msg-${role}"><strong>${sender}:</strong> ${msg}</div>`;
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function toggleTheme() {
+            const curr = document.body.getAttribute('data-theme');
+            document.body.setAttribute('data-theme', curr === 'dark' ? 'light' : 'dark');
+        }
+    </script>
+</body>
+</html>

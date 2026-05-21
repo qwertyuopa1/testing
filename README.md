@@ -3,6 +3,8 @@ Games and stuff by Linus Li/Lee (qwertyuopa1)
 
 If you want to join plz create and account and tell me the name so I can add you
 
+PLEASE DO NOT SHARE THIS LINK OR I WILL HAVE TO MAKE IT PRIVATE
+
 Notes:
 
 - do not put names after comments in readme

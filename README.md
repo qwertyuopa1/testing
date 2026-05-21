@@ -13,9 +13,11 @@ Notes:
 
 - go to discussions page for chat, and issues if you want to do something - Linus
 
-- chat will not always work if your device has strict blocking or are on a public network - Nicholas He
+- chat will not always work if your device has strict blocking or are on a public network - Nicholas
 
 - if you are adding new files, plz add them to corresponding file or tell me - Linus
+
+- most of the code in links will not work
 
 5/19/2026 
 

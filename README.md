@@ -1,5 +1,5 @@
 
-Games and stuff (by Linus Li/Lee)
+Games and stuff by Linus Li/Lee (qwertyuopa1)
 
 If you want to join plz create and account and tell me the name so I can add you
 
@@ -25,7 +25,7 @@ Notes:
 
 - run the files for games in html runner (just upload)
 
-- take content of the chat.html file to run in a html viewer or in file:// (credit for the chat: Nicholas)
+- take content of the chat.html file to run in a html viewer or in file:// (credit for the chat: existing7)
 
 5/20/2026 
 

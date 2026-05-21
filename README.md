@@ -14,7 +14,7 @@ Notes:
 - go to discussions page for chat, and issues if you want to do something
 
 - chat will not always work if your device has strict blocking or are on a public network
-- 
+
 - if you are adding new files, plz add them to corresponding file or tell me 
 
 - most of the code in links will not work 
@@ -32,13 +32,17 @@ Notes:
 - tried to add Counter-Strike.exe, but file too large and zip does not work, tried to use Git LFS (someone plz help) 
 
 - opened contributer spots
-- 
+  
 - added organized file folders 
 
 - added new discussion spots
 
 - added a new unresolved issue regarding large file sizes 
 
-- added temporary sharepoint links for the files that are too large 
+- added temporary sharepoint links for the files that are too large
+
+5/21/2026
+
+- 
 
 

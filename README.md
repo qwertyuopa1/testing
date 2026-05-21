@@ -1,5 +1,5 @@
 
-Games and stuff (by Linus Li)
+Games and stuff (by Linus Li/Lee)
 
 If you want to join plz create and account and tell me the name so I can add you
 

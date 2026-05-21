@@ -33,5 +33,10 @@ Notes:
 
 - added organized file folders - Linus
 
+- added new discussion spots
+
+- added a new unresolved issue regarding large file sizes
+
+- added temporary sharepoint links for the files that are too large
 
 

@@ -77,4 +77,4 @@ int main() {
     return 0;
 }
 //this is a simple version
-//may be buggss 
+//may be buggy

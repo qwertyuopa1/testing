@@ -19,6 +19,8 @@ Notes:
 
 - most of the code in links will not work
 
+- if you have zipped files of games add them to the zipped games file
+
 5/19/2026 
 
 - run the files for games in html runner (just upload)- Linus

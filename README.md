@@ -17,9 +17,9 @@ Notes:
 
 - if you are adding new files, plz add them to corresponding file or tell me - Linus
 
-- most of the code in links will not work
+- most of the code in links will not work - Linus
 
-- if you have zipped files of games add them to the zipped games file
+- if you have zipped files of games add them to the zipped games file - Linus
 
 5/19/2026 
 
@@ -37,8 +37,8 @@ Notes:
 
 - added new discussion spots
 
-- added a new unresolved issue regarding large file sizes
+- added a new unresolved issue regarding large file sizes - Linus
 
-- added temporary sharepoint links for the files that are too large
+- added temporary sharepoint links for the files that are too large - Linus
 
 

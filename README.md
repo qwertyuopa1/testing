@@ -50,6 +50,6 @@ Notes:
 5/22/2026
 
 - added hollow knight
-- added calculator.hlmt
+- added calculator.html
 
 

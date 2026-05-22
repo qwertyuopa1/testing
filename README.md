@@ -50,9 +50,9 @@ Notes:
 5/22/2026
 
 - added hollow knight
-- 
+  
 - added calculator.html
-- 
+  
 - added a games sugestion page
 
 

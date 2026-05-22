@@ -51,5 +51,6 @@ Notes:
 
 - added hollow knight
 - added calculator.html
+- added a games sugestion page
 
 

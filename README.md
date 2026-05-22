@@ -45,12 +45,14 @@ Notes:
 
 5/21/2026
 
-- added new games and stuff
+- added new games and stuff (too much so didn't list)
 
 5/22/2026
 
 - added hollow knight
+- 
 - added calculator.html
+- 
 - added a games sugestion page
 
 

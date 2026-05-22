@@ -47,4 +47,8 @@ Notes:
 
 - added new games and stuff
 
+5/22/2026
+
+- added hollow knight
+
 

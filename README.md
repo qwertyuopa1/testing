@@ -55,4 +55,13 @@ Notes:
   
 - added a games sugestion page
 
+- 5/27/2026
+- hollow knight does not work
+
+- 5/28/2026
+
+- changed 1 line in hollow knight
+
+
+
 

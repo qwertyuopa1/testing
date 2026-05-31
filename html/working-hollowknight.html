@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+
+<html lang="en-us">
+
+ 
+
+<head>
+  <style>
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #231F20;
+    }
+
+    #unity-container {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+
+    #unity-canvas {
+        filter: url('data:image/svg+xml,\
+            <svg xmlns="http://www.w3.org/2000/svg">\
+                <filter id="bgr">\
+                    <feColorMatrix type="matrix" values="\
+                        0 0 1 0 0 \
+                        0 1 0 0 0 \
+                        1 0 0 0 0 \
+                        0 0 0 1 0" />\
+                </filter>\
+            </svg>#bgr');
+    }
+</style>
+  
+  <script type='text/javascript' nonce="tL1ZXp76mHFRleOikSaTPg";>
+
+const lsijVersion = 1;
+
+ 
+
+ 
+
+ 
+
+class Flags {
+
+              constructor(url, terms) {
+
+                             this.url = url;
+
+                             this.matched = {};
+
+ 
+
+                             this.terms = [];
+
+                             terms.forEach((term) => {
+
+                                           let s = term.replace(/[\]{}?^$().*\\+|[]/g, '\\$&');
+
+                                           s = s.replace(/\\\*/g, '.*');
+
+                                           s = s.replace(/\\\?/g, '.');
+
+                                           let regex = new RegExp('\\b' + s + '\\b', 'gi');
+
+                                           this.terms.push({term: term, regex: regex});
+
+                             });
+
+              }
+
+ 
+
+              report(flags) {
+
+        console.debug('[LS Filter] flag report');
+
+                             if (!flags.length)
+
+            return;
+
+ 
+
+                             const xhr = new XMLHttpRequest();
+
+                             xhr.open('POST', document.location.origin + '/772ff609488b2c9bb6bb2871cac430715c14f39e1462bea30062462d694cfd9a/log_flag', true);
+
+                             console.debug('[LS Filter] sending -> ', flags);
+
+                             xhr.send(JSON.stringify({
+
+                                           url: this.url.href,
+
+                                           flags: flags,
+
+                                           at_epoch_ms: Date.now()
+
+                             }));
+
+              }
+
+ 
+
+              matchTerms(input, flagAll) {
+
+                             const matches = [];
+
+                             this.terms.forEach((term) => {
+
+                                           const hits = input.match(term.regex);
+
+                                           if (!hits || !hits.length)
+
+                                                          return;
+
+ 
+
+                                           let added = false;
+
+                                           if (typeof(this.matched[term.term]) === 'undefined')
+
+                                                          added = true
+
+ 
+
+                                           let count = hits.length;
+
+                                           if (!added)
+
+                                                          count -= this.matched[term.term];
+
+ 
+
+                                           this.matched[term.term] = hits.length;
+
+ 
+
+                                           if (added || flagAll)
+
+                                                          matches.push([term.term, count]);
+
+                             });
+
+                             return matches;
+
+              }
+
+ 
+
+              scanIntentValue(value) {
+
+                             const matches = this.matchTerms(value, true);
+
+                             const changes = [];
+
+                             matches.forEach((match) => {
+
+                                           match[2] = true; // mark as user entered
+
+                                           changes.push(match);
+
+                             });
+
+ 
+
+                             if (changes.length)
+
+                                           this.report(changes);
+
+              }
+
+ 
+
+              scanIntentValues(values) {
+
+                             values.forEach((value) => {
+
+                                           this.scanIntentValue(value);
+
+                             });
+
+              }
+
+ 
+
+              scanIntentEvent(event) {
+
+                             switch (event.target.tagName.toLowerCase()) {
+
+                             case 'input':
+
+                                           let type = event.target.type || 'text';
+
+                                           type = type.toLowerCase();
+
+ 
+
+                                           // Dont scan password fields
+
+                                           if (type === 'password')
+
+                                                          return;
+
+                                           this.scanIntentValue(event.target.value);
+
+                                           break;
+
+                             case 'textarea':
+
+                                           this.scanIntentValue(event.target.value);
+
+                                           break;
+
+                             }
+
+              }
+
+ 
+
+              scanIntent(event) {
+
+                             if (typeof(gatherIntent) === 'function') {
+
+                                           const intent = gatherIntent();
+
+                                           if (intent.length)
+
+                                                          this.scanIntentValues(intent);
+
+                             }
+
+              }
+
+ 
+
+              onChange(event) {
+
+                             this.scanIntentEvent(event);
+
+              }
+
+ 
+
+              onKeyup(event) {
+
+                             this.scanIntentEvent(event);
+
+              }
+
+ 
+
+              bindDOM() {
+
+                             document.addEventListener('change', this.onChange.bind(this));
+
+                             document.addEventListener('keyup', this.onKeyup.bind(this));
+
+                             setInterval(() => {
+
+                                           this.scanIntent();
+
+                             }, 1000);
+
+              }
+
+}
+
+ 
+
+const initFlagScanning = function(terms) {
+
+              if (!terms.length)
+
+                             return;
+
+ 
+
+              console.debug('[LS Filter] init flag scanning');
+
+              const a = document.createElement('A');
+
+              a.href = window.location.href;
+
+              const flags = new Flags(a, terms);
+
+             
+
+              console.debug('[LS Filter] flagging intent');
+
+              if (typeof(initGatherIntent) === 'function')
+
+                             initGatherIntent();
+
+ 
+
+              flags.bindDOM();
+
+             
+
+};
+
+ 
+
+initFlagScanning(["BADSTUFFBETA"]);
+
+ 
+
+ 
+
+ 
+
+function checkCurrentSite(yt, url) {
+
+  const xhr = new XMLHttpRequest();
+
+  const body = JSON.stringify({
+
+    url: url || window.location.href,
+
+    youtube: yt
+
+  });
+
+  console.log('[LS Filter] reporting ->', body);
+
+  const checkUrl = document.location.origin + '/772ff609488b2c9bb6bb2871cac430715c14f39e1462bea30062462d694cfd9a/log';
+
+  xhr.open('POST', checkUrl, true);
+
+  xhr.send(body);
+
+  xhr.onreadystatechange = function () {
+
+    if (this.status === 200 && xhr.responseText) {
+
+      const score = JSON.parse(xhr.responseText);
+
+      console.log('[LS Filter] score ->', score.allow);
+
+      if (score.redirect) {
+
+        window.location.href = score.redirect;
+
+        hardBlock();
+
+      }
+
+    }
+
+  };
+
+}
+
+ 
+
+let hardBlockPolicy;
+
+function getHardBlockPolicy() {
+
+  if (typeof(trustedTypes) !== 'undefined' && !hardBlockPolicy) {
+
+    hardBlockPolicy = trustedTypes.createPolicy('hardBlock', {
+
+      createHTML: (string) => string
+
+    });
+
+  }
+
+  return hardBlockPolicy;
+
+}
+
+ 
+
+function hardBlock() {
+
+  stopVideo();
+
+  const stopInt = setInterval(stopVideo, 500);
+
+  setTimeout(() => {
+
+    const policy = getHardBlockPolicy();
+
+    if (policy) {
+
+      document.body.innerHTML = policy.createHTML('<img src="/772ff609488b2c9bb6bb2871cac430715c14f39e1462bea30062462d694cfd9a/blocked-image-search.png" style="width: 100%; height: 100%">');
+
+    } else {
+
+      document.body.innerHTML = '<img src="/772ff609488b2c9bb6bb2871cac430715c14f39e1462bea30062462d694cfd9a/blocked-image-search.png" style="width: 100%; height: 100%">';
+
+    }
+
+    clearInterval(stopInt);
+
+  }, 3000)
+
+}
+
+ 
+
+function stopVideo() {
+
+  const ea = document.getElementsByTagName('video');
+
+  for (i in ea) {
+
+    if (typeof(ea[i].pause) !== 'function') {
+
+      continue;
+
+    }
+
+    if (!ea[i].paused) {
+
+        console.debug('[LS Filter] pause video');
+
+        ea[i].pause();
+
+    }
+
+  }
+
+}
+
+ 
+
+function googleVideo() {
+
+  if (window.location.href.match(/google\.com\/search\?/)) {
+
+    const vidMatcher = /google\.com\/search\?.*vid:([^#\&\?]{11})/;
+
+    let prevVideo;
+
+    new MutationObserver(function() {
+
+      console.log('[LS Filter] MutationObserver');
+
+      let video;
+
+      let m = window.location.href.match(vidMatcher)
+
+      if (m) {
+
+        video = m[1];
+
+      }
+
+      if (video === prevVideo) { return; }          
+
+      console.log('[LS Filter] scoring video ->', video);
+
+      prevVideo = video;
+
+      checkCurrentSite(true, 'https://www.youtube.com/watch?v=' + video);
+
+    }).observe(document, {subtree: true, childList: true});
+
+  }
+
+}
+
+ 
+
+function onLoad() {
+
+  console.log('[LS Filter] loaded');
+
+  if (window.top === window.self) {
+
+    console.log('[LS Filter] top window: ' + window.location.href);
+
+    googleVideo();
+
+  }
+
+}
+
+ 
+
+onLoad();
+
+ 
+
+</script>
+
+    <base href=https://cdn.jsdelivr.net/gh/aukak/hollow-knight@2fc2e7149f0d5b2609b135ab48f00fd973930635/>
+
+    <meta charset="utf-8">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <title>Unity WebGL Player | Hollow Knight</title>
+
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+
+    <link rel="stylesheet" href="TemplateData/style.css">
+
+    <style>
+
+        html,
+
+        body {
+
+            margin: 0;
+
+            padding: 0;
+
+            height: 100%;
+
+            overflow: hidden;
+
+            background: #231F20;
+
+        }
+
+ 
+
+        #unity-container {
+
+            width: 100%;
+
+            height: 100%;
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+        }
+
+    </style>
+
+</head>
+
+ 
+
+<body>
+
+    <div id="loading-text" style="color: white; font-size: 48px; font-family: cursive; text-align: center; margin-top: 20px;"> LOADING... </div>
+
+    <div hidden id="unity-container" class="unity-desktop">
+
+        <canvas id="unity-canvas"></canvas>
+
+        <div id="unity-loading-bar">
+
+            <div id="unity-logo"></div>
+
+            <div id="unity-progress-bar-empty">
+
+                <div id="unity-progress-bar-full"></div>
+
+            </div>
+
+        </div>
+
+        <div id="unity-mobile-warning"> WebGL builds are not supported on mobile devices. </div>
+
+    </div>
+
+    <script>
+
+        const DB_NAME = "cachedb";
+
+        const STORE_NAME = "files";
+
+ 
+
+        function openCacheDB() {
+
+            return new Promise((resolve, reject) => {
+
+                const req = indexedDB.open(DB_NAME, 1);
+
+ 
+
+                req.onupgradeneeded = () => {
+
+                    const db = req.result;
+
+                    if (!db.objectStoreNames.contains(STORE_NAME)) {
+
+                        db.createObjectStore(STORE_NAME);
+
+                    }
+
+                };
+
+ 
+
+                req.onsuccess = () => resolve(req.result);
+
+                req.onerror = () => reject(req.error);
+
+            });
+
+        }
+
+ 
+
+        async function saveToCache(key, blob) {
+
+            const db = await openCacheDB();
+
+            return new Promise((resolve, reject) => {
+
+                const tx = db.transaction(STORE_NAME, "readwrite");
+
+                tx.objectStore(STORE_NAME).put(blob, key);
+
+                tx.oncomplete = () => resolve();
+
+                tx.onerror = () => reject(tx.error);
+
+            });
+
+        }
+
+ 
+
+        async function loadFromCache(key) {
+
+            const db = await openCacheDB();
+
+            return new Promise((resolve, reject) => {
+
+                const tx = db.transaction(STORE_NAME, "readonly");
+
+                const req = tx.objectStore(STORE_NAME).get(key);
+
+                req.onsuccess = () => resolve(req.result || null);
+
+                req.onerror = () => reject(req.error);
+
+            });
+
+        }
+
+ 
+
+        async function deleteFromCache(key) {
+
+            const db = await openCacheDB();
+
+            return new Promise((resolve, reject) => {
+
+                const tx = db.transaction(STORE_NAME, "readwrite");
+
+                tx.objectStore(STORE_NAME).delete(key);
+
+                tx.oncomplete = () => resolve();
+
+                tx.onerror = () => reject(tx.error);
+
+            });
+
+        }
+
+    </script>
+
+    <script>
+
+        var loadingText = document.querySelector("#loading-text");
+
+        let totalBytes = 0;
+
+        let loadedBytes = 0;
+
+ 
+
+        async function fetchWithProgress(url) {
+
+            const response = await fetch(url);
+
+            const reader = response.body.getReader();
+
+            let chunks = [];
+
+            let received = 0;
+
+            while (true) {
+
+                const {
+
+                    done,
+
+                    value
+
+                } = await reader.read();
+
+                if (done) break;
+
+                received += value.length;
+
+                loadedBytes += value.length;
+
+                chunks.push(value);
+
+                let mbDone = (loadedBytes / (1024 * 1024)).toFixed(2);
+
+                let mbTotal = '912.81';
+
+                loadingText.textContent = `LOADING... ${mbDone} MB / ${mbTotal} MB`;
+
+            }
+
+            let fullBuffer = new Uint8Array(received);
+
+            let offset = 0;
+
+            for (let chunk of chunks) {
+
+                fullBuffer.set(chunk, offset);
+
+                offset += chunk.length;
+
+            }
+
+            return fullBuffer.buffer;
+
+        }
+
+        async function mergeFiles(fileParts, cacheKey) {
+
+            const cached = await loadFromCache(cacheKey);
+
+            if (cached) {
+
+                return URL.createObjectURL(cached);
+
+            }
+
+            const buffers = await Promise.all(
+
+                fileParts.map(part => fetchWithProgress(part))
+
+            );
+
+            const mergedBlob = new Blob(buffers);
+
+            await saveToCache(cacheKey, mergedBlob);
+
+            return URL.createObjectURL(mergedBlob);
+
+        }
+
+ 
+
+        function getParts(file, start, end) {
+
+            let parts = [];
+
+            for (let i = start; i <= end; i++) {
+
+                parts.push(file + ".part" + i);
+
+            }
+
+            return parts;
+
+        }
+
+        (async () => {
+
+            const [dataUrl, wasmurl] = await Promise.all([
+
+                mergeFiles(getParts("Build/hktruffled.data", 1, 45), "hktruffled.data"),
+
+                mergeFiles(getParts("Build/hktruffled.wasm", 1, 2), "hktruffled.wasm"),
+
+            ]);
+
+            var buildUrl = "Build";
+
+            var loaderUrl = buildUrl + "/hktruffled.loader.js";
+
+            var config = {
+
+                dataUrl: dataUrl,
+
+                frameworkUrl: buildUrl + "/hktruffled.framework.js",
+
+                codeUrl: wasmurl,
+
+                streamingAssetsUrl: "StreamingAssets",
+
+                companyName: "Team Cherry & Truffled",
+
+                productName: "Hollow Knight",
+
+                productVersion: "1.1",
+
+            };
+
+            var container = document.querySelector("#unity-container");
+
+            container.hidden = false;
+
+            var canvas = document.querySelector("#unity-canvas");
+
+            var loadingBar = document.querySelector("#unity-loading-bar");
+
+            var progressBarFull = document.querySelector("#unity-progress-bar-full");
+
+            var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+
+            var mobileWarning = document.querySelector("#unity-mobile-warning");
+
+            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+
+                container.className = "unity-mobile";
+
+                config.devicePixelRatio = 1;
+
+                mobileWarning.style.display = "block";
+
+                setTimeout(() => {
+
+                    mobileWarning.style.display = "none";
+
+                }, 5000);
+
+            } else {
+
+                if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+
+                    var meta = document.createElement('meta');
+
+                    meta.name = 'viewport';
+
+                    meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+
+                    document.getElementsByTagName('head')[0].appendChild(meta);
+
+                    container.className = "unity-mobile";
+
+                    canvas.className = "unity-mobile";
+
+                } else {
+
+                    function resizeCanvas() {
+
+                        canvas.width = window.innerWidth;
+
+                        canvas.height = window.innerHeight;
+
+                        canvas.style.width = window.innerWidth + "px";
+
+                        canvas.style.height = window.innerHeight + "px";
+
+                    }
+
+                    resizeCanvas();
+
+                    window.addEventListener('resize', resizeCanvas);
+
+                }
+
+            }
+
+            loadingBar.style.display = "block";
+
+            var script = document.createElement("script");
+
+            script.src = loaderUrl;
+
+            script.onload = () => {
+
+                createUnityInstance(canvas, config, (progress) => {
+
+                    progressBarFull.style.width = 100 * progress + "%";
+
+                }).then((unityInstance) => {
+
+                    loadingText.remove();
+
+                    loadingBar.style.display = "none";
+
+                    canvas.style.display = "block";
+
+                }).catch(async (message) => {
+
+                    await deleteFromCache("hktruffled.wasm");
+
+                    alert(message);
+
+                });
+
+ 
+
+            };
+
+            document.body.appendChild(script);
+
+        })();
+
+    </script>
+
+ 
+
+</body>
+
+ 
+
+</html>

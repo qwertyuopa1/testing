@@ -63,5 +63,11 @@ Notes:
 - changed 1 line in hollow knight
 
 
+6/1/2026
+
+- added a bunch of zipped games
+
+- made plans for the beta 0.2 release
+
 
 
